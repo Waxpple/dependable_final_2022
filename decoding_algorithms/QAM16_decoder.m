@@ -1,0 +1,23 @@
+function out = QAM16_decoder(in,amplifier)
+    out = zeros(4*length(in),1);
+    if amplifier
+        data = in*sqrt(4) * sqrt(10) / sqrt(4);
+    else
+        data = in;
+    end
+    %first quantized the input
+    lut = [ -3+ 1i*-3,-3+ 1i*-1,-3+ 1i*3,-3+ 1i*1, ...
+            -1+ 1i*-3,-1+ 1i*-1,-1+ 1i*3,-1+ 1i*1, ...
+            3+ 1i*-3,3+ 1i*-1,3+ 1i*3,3+ 1i*1, ...
+            1+ 1i*-3,1+ 1i*-1,1+ 1i*3,1+ 1i*1 ];
+
+    bin_lut = [ [0 0 0 0]; [0 0 0 1]; [0 0 1 0]; [0 0 1 1];  ...
+                [0 1 0 0]; [0 1 0 1]; [0 1 1 0]; [0 1 1 1];  ...
+                [1 0 0 0]; [1 0 0 1]; [1 0 1 0]; [1 0 1 1];  ...
+                [1 1 0 0]; [1 1 0 1]; [1 1 1 0]; [1 1 1 1];  ...
+                ];
+    for i = 1:length(data)
+        distance = lut - data(i);
+        out(4*(i-1)+1:4*i) = [bin_lut(distance == min(distance),:)]';
+    end
+end
