@@ -1,5 +1,5 @@
 clear;
-frames=1000;
+frames=10000;
 codewordN = 63; % Codeword length
 codewordK = 57; % Message length
 %QAM16_sphere_decoding(1000 * k * 4);
@@ -12,7 +12,7 @@ tic;
 
 
 parfor eb_n0_iter = 1:length(eb_n0)
-    codewordN = 63; % Codeword length
+    codewordN = 63; % Codeword length (parfor needs local variable)
     codewordK = 57; % Message length
     information = randi(2,codewordK*4*frames,1)-1;
     encodedData = encode(information,codewordN,codewordK,'hamming/binary');
